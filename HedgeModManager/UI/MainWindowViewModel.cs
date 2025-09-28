@@ -19,6 +19,9 @@ namespace HedgeModManager.UI
 {
     public class MainWindowViewModel : INotifyPropertyChanged, IDropTarget
     {
+        // Dummy GameInstall for adding games
+        public static GameInstall GameInstallAddGame { get; set; } = new GameInstall(HedgeModManager.Games.AddGame, null, null, GameLauncher.None);
+
         public CPKREDIRConfig CPKREDIR { get; set; }
         public ModsDB ModsDB { get; set; }
         public ObservableCollection<GameInstall> Games { get; set; } = new ObservableCollection<GameInstall>();

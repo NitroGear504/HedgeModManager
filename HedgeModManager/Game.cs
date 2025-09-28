@@ -19,6 +19,28 @@ namespace HedgeModManager
 
         public static Game Unknown = new Game();
         
+        // For GUI use
+        public static Game AddGame { get; set; } = new Game()
+        {
+            GameName = "AddGame",
+        };
+
+        public static Game UnleashedRecompiled = new Game()
+        {
+            GameName = "UnleashedRecompiled",
+            SaveName = "",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = [],
+            AppID = "",
+            GBProtocol = "hedgemmswas",
+            Is64Bit = true,
+            ModLoader = null,
+            CodesURL = Resources.URL_SWA_CODES,
+            GamePaths = [":HKEY_CURRENT_USER\\SOFTWARE\\UnleashedRecomp"],
+            SupportsCodeCompilation = false
+        };
+		
         public static Game SonicGenerations = new Game()
         {
             GameName = "SonicGenerations",
@@ -279,6 +301,7 @@ namespace HedgeModManager
 
         public string GameName => GetGameTitle();
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{Game?.GameName}.png"); } }
+        public bool IsAddGame => Game == Games.AddGame;
 
         public GameInstall(Game game, string directory, string executablePath, GameLauncher launcher, bool custom = false)
         {
