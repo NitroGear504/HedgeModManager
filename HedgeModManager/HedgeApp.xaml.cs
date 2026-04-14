@@ -191,6 +191,7 @@ namespace HedgeModManager
             CountLanguages();
             if (IsLinux)
                 Linux.PatchHMMRegistry();
+            _ = GBAPI.RunRemoteInstallServer();
 #if DEBUG
             // Find a Steam Game
             GameInstalls = GameInstall.SearchForGames(nameof(Games.SonicGenerations));
@@ -242,6 +243,10 @@ namespace HedgeModManager
                 {
                     string url = arg.Substring("hedgemm://install/".Length);
                     new ModInstallWindow(url).ShowDialog();
+                }
+                else if (arg.StartsWith("hedgemm://gamebanana/", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    GBAPI.ParseCommandLine(arg);
                 }
                 Shutdown();
             }
@@ -850,7 +855,13 @@ namespace HedgeModManager
         public static async Task<(bool, WorkflowRunInfo, ArtifactInfo)> CheckForUpdatesDevAsync()
         {
             var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName, "build.yml");
-            var workflow = runs.Runs.FirstOrDefault();
+            if (runs == null)
+            {
+                // No runs found or API error
+                CreateOKMessageBox(Localise("CommonUIError"), Localise("DialogUIGitHubError")).ShowDialog();
+                return (false, null, null);
+            }
+            var workflow = runs.Runs?.FirstOrDefault();
             if (workflow == null)
                 return (false, null, null);
 
